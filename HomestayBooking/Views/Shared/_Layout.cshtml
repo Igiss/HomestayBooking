@@ -1,0 +1,79 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="~/Content/StyleSheet2.css" />
+    <link rel="stylesheet" href="~/Content/StyleSheet1.css" />
+    <link rel="stylesheet" href="~/Content/product.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
+    @RenderSection("Styles", required: false)
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="~/Content/JavaScript.js"></script>
+</head>
+<body>
+    <aside class="sidebar" id="sidebar">
+        <button class="toggle-btn" id="toggleBtn">☰</button>
+        <div class="logo">
+            <img src="https://via.placeholder.com/40" alt="Logo" />
+        </div>
+
+        <nav class="sidebar__nav">
+            <ul>
+                <li class="active">
+                    <a href="#"><i data-feather="home"></i><span>TRANG CHỦ</span></a>
+                </li>
+                <li>
+                    <a href="#">
+                        <img src="IMG/price-tag_10926767 (1).png"
+                             alt="icon"
+                             width="24px" /><span>CÁC CĂN HỘ</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#"><i data-feather="activity"></i><span>BOOK AirBnb</span></a>
+                </li>
+                <li>
+                    <a href="#"><i data-feather="headphones"></i><span>Liên hệ</span></a>
+                </li>
+                <li>
+                    <a href="#"><i data-feather="bar-chart-2"></i><span>Report</span></a>
+                </li>
+                <li>
+                    <a href="#"><i data-feather="settings"></i><span>Settings</span></a>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="sidebar__footer">
+            <img src="https://via.placeholder.com/150x100" alt="Image" />
+            <p></p>
+            <div class="user">
+                <img src="https://via.placeholder.com/32" alt="User" />
+                <div class="user-info">
+                    <strong></strong>
+                    <small></small>
+                </div>
+            </div>
+        </div>
+    </aside>
+    <script>
+        feather.replace();
+    </script>
+
+
+    <div class="main-container">
+        <div class="search-bar">
+            <input type="text" placeholder="Tìm kiếm sản phẩm..." />
+            <button>Tìm</button>
+        </div>
+        @RenderBody()
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>
