@@ -13,6 +13,20 @@ namespace HomestayBooking
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+            // Specific routes for Account actions - must come first
+            routes.MapRoute(
+                name: "Login",
+                url: "Login",
+                defaults: new { controller = "Accounts", action = "Login" }
+            );
+
+            routes.MapRoute(
+                name: "Register",
+                url: "Register",
+                defaults: new { controller = "Accounts", action = "Create" }
+            );
+
+            // Default route for all other controllers
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",

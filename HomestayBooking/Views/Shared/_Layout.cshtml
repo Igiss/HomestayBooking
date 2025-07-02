@@ -1,79 +1,136 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
-
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewBag.Title</title>
-    <link rel="stylesheet" href="~/Content/StyleSheet2.css" />
-    <link rel="stylesheet" href="~/Content/StyleSheet1.css" />
-    <link rel="stylesheet" href="~/Content/product.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewBag.Title - Homestay Booking</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <!-- Custom CSS -->
+    <link href="~/Content/Site.css" rel="stylesheet" />
     @RenderSection("Styles", required: false)
-    <script src="https://unpkg.com/feather-icons"></script>
-    <script src="~/Content/JavaScript.js"></script>
 </head>
 <body>
-    <aside class="sidebar" id="sidebar">
-        <button class="toggle-btn" id="toggleBtn">☰</button>
-        <div class="logo">
-            <img src="https://via.placeholder.com/40" alt="Logo" />
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="@Url.Action("Index", "Home")">
+                <i class="fas fa-home me-2"></i>
+                Homestay Booking
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("Index", "Home")">
+                            <i class="fas fa-home me-1"></i>Trang chủ
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-search me-1"></i>Tìm homestay
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-info-circle me-1"></i>Giới thiệu
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-phone me-1"></i>Liên hệ
+                        </a>
+                    </li>
+                </ul>
+                
+                <ul class="navbar-nav">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" 
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user me-1"></i>
+                                @Session["Username"]
+                                <span class="badge bg-light text-dark ms-1">@Session["UserRole"]</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                @{
+                                    var role = Session["UserRole"] != null ? Session["UserRole"].ToString() : string.Empty;
+                                }
+                                @if (role == "admin")
+                                {
+                                    <li><a class="dropdown-item" href="@Url.Action("Index", "Home", new { area = "Admin" })">
+                                        <i class="fas fa-tachometer-alt me-2"></i>Quản trị
+                                    </a></li>
+                                }
+                                @if (role == "owner")
+                                {
+                                    <li><a class="dropdown-item" href="@Url.Action("Index", "Home", new { area = "Owner" })">
+                                        <i class="fas fa-home me-2"></i>Quản lý homestay
+                                    </a></li>
+                                }
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="#">
+                                    <i class="fas fa-user-cog me-2"></i>Hồ sơ
+                                </a></li>
+                                <li><a class="dropdown-item" href="#">
+                                    <i class="fas fa-cog me-2"></i>Cài đặt
+                                </a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="@Url.Action("Logout", "Accounts")">
+                                    <i class="fas fa-sign-out-alt me-2"></i>Đăng xuất
+                                </a></li>
+                            </ul>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Login">
+                                <i class="fas fa-sign-in-alt me-1"></i>Đăng nhập
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Register">
+                                <i class="fas fa-user-plus me-1"></i>Đăng ký
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
         </div>
+    </nav>
 
-        <nav class="sidebar__nav">
-            <ul>
-                <li class="active">
-                    <a href="#"><i data-feather="home"></i><span>TRANG CHỦ</span></a>
-                </li>
-                <li>
-                    <a href="#">
-                        <img src="IMG/price-tag_10926767 (1).png"
-                             alt="icon"
-                             width="24px" /><span>CÁC CĂN HỘ</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#"><i data-feather="activity"></i><span>BOOK AirBnb</span></a>
-                </li>
-                <li>
-                    <a href="#"><i data-feather="headphones"></i><span>Liên hệ</span></a>
-                </li>
-                <li>
-                    <a href="#"><i data-feather="bar-chart-2"></i><span>Report</span></a>
-                </li>
-                <li>
-                    <a href="#"><i data-feather="settings"></i><span>Settings</span></a>
-                </li>
-            </ul>
-        </nav>
+    <!-- Main Content -->
+    <main class="main-content">
+        @RenderBody()
+    </main>
 
-        <div class="sidebar__footer">
-            <img src="https://via.placeholder.com/150x100" alt="Image" />
-            <p></p>
-            <div class="user">
-                <img src="https://via.placeholder.com/32" alt="User" />
-                <div class="user-info">
-                    <strong></strong>
-                    <small></small>
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Homestay Booking</h5>
+                    <p>Nền tảng đặt phòng homestay uy tín và chất lượng.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p>&copy; @DateTime.Now.Year Homestay Booking. All rights reserved.</p>
                 </div>
             </div>
         </div>
-    </aside>
-    <script>
-        feather.replace();
-    </script>
+    </footer>
 
-
-    <div class="main-container">
-        <div class="search-bar">
-            <input type="text" placeholder="Tìm kiếm sản phẩm..." />
-            <button>Tìm</button>
-        </div>
-        @RenderBody()
-    </div>
-
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
+    <!-- Scripts -->
+    <script src="~/Scripts/jquery-3.7.0.min.js"></script>
+    <script src="~/Scripts/bootstrap.bundle.min.js"></script>
+    @RenderSection("Scripts", required: false)
 </body>
 </html>

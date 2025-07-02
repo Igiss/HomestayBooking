@@ -1,56 +1,96 @@
 ﻿@model HomestayBooking.Models.Account
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Đăng ký tài khoản";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Create</h2>
+<h2 class="text-center mb-4">Đăng ký tài khoản</h2>
 
-
-@using (Html.BeginForm()) 
-{
-    @Html.AntiForgeryToken()
-    
-    <div class="form-horizontal">
-        <h4>Account</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.LabelFor(model => model.Account1, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Account1, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Account1, "", new { @class = "text-danger" })
-            </div>
+<div class="container">
+    <ul class="nav nav-tabs mb-4" id="registerTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="customer-tab" data-bs-toggle="tab" data-bs-target="#customer"
+                type="button" role="tab" aria-controls="customer" aria-selected="true">
+                <i class="fas fa-user"></i> Khách hàng
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="owner-tab" data-bs-toggle="tab" data-bs-target="#owner" type="button"
+                role="tab" aria-controls="owner" aria-selected="false">
+                <i class="fas fa-home"></i> Chủ căn hộ
+            </button>
+        </li>
+    </ul>
+    <div class="tab-content" id="registerTabContent">
+        <div class="tab-pane fade show active" id="customer" role="tabpanel" aria-labelledby="customer-tab">
+            @using (Html.BeginForm("Create", "Accounts", FormMethod.Post, new
+            {
+                @class = "needs-validation",
+                novalidate = "novalidate"
+            }))
+            {
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="Role" value="customer" />
+                <div class="mb-3">
+                    <label for="UserNameCustomer" class="form-label">Tên đăng nhập</label>
+                    <input type="text" class="form-control" id="UserNameCustomer" name="UserName" required />
+                    <div class="invalid-feedback">Vui lòng nhập tên đăng nhập.</div>
+                </div>
+                <div class="mb-3">
+                    <label for="PasswordCustomer" class="form-label">Mật khẩu</label>
+                    <input type="password" class="form-control" id="PasswordCustomer" name="Password" required />
+                    <div class="invalid-feedback">Vui lòng nhập mật khẩu.</div>
+                </div>
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary btn-lg">Đăng ký Khách hàng</button>
+                </div>
+            }
         </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Role, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Role, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Role, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
+        <div class="tab-pane fade" id="owner" role="tabpanel" aria-labelledby="owner-tab">
+            @using (Html.BeginForm("Create", "Accounts", FormMethod.Post, new
+            {
+                @class = "needs-validation",
+                novalidate = "novalidate"
+            }))
+            {
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="Role" value="owner" />
+                <div class="mb-3">
+                    <label for="UserNameOwner" class="form-label">Tên đăng nhập</label>
+                    <input type="text" class="form-control" id="UserNameOwner" name="UserName" required />
+                    <div class="invalid-feedback">Vui lòng nhập tên đăng nhập.</div>
+                </div>
+                <div class="mb-3">
+                    <label for="PasswordOwner" class="form-label">Mật khẩu</label>
+                    <input type="password" class="form-control" id="PasswordOwner" name="Password" required />
+                    <div class="invalid-feedback">Vui lòng nhập mật khẩu.</div>
+                </div>
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-success btn-lg">Đăng ký Chủ căn hộ</button>
+                </div>
+            }
         </div>
     </div>
-}
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
 </div>
 
 @section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        // Bootstrap tab validation
+        (function () {
+            'use strict';
+            window.addEventListener('load', function () {
+                var forms = document.getElementsByClassName('needs-validation');
+                Array.prototype.forEach.call(forms, function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+        })();
+    </script>
 }

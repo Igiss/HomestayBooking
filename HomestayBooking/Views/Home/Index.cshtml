@@ -1,55 +1,239 @@
-﻿<main>
-    <div class="main-content">
-        <div class="product-container">
-            <div class="product-home">
-                <div class="col-inner">
-                    <div class="product-item">
-                        <a href="@Url.Action("Product", "Default")">
-                            <img src="https://zhomestay.vn/wp-content/uploads/2024/09/z5764692376279_184d90ea3d694c36b51785f8d64d0b12-563x563.jpg.webp"
-                                 alt="Product" />
+﻿@{
+    ViewBag.Title = "Trang chủ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Hero Section -->
+<div class="hero-section bg-primary text-white py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-4">
+                    <i class="fas fa-home me-3"></i>
+                    Khám phá Homestay tuyệt vời
+                </h1>
+                <p class="lead mb-4">
+                    Trải nghiệm những ngôi nhà độc đáo, ấm cúng và đầy tiện nghi.
+                    Đặt phòng dễ dàng với giá cả hợp lý.
+                </p>
+                @if (!User.Identity.IsAuthenticated)
+                {
+                    <div class="d-flex gap-3">
+                        <a href="/Login" class="btn btn-light btn-lg">
+                            <i class="fas fa-sign-in-alt me-2"></i>
+                            Đăng nhập
                         </a>
-                        <a href="#"><h3>Product Name 1</h3></a>
-                        <a href="#"><p>Product Description 1</p></a>
-                        <button class="btn">View Details</button>
+                        <a href="/Register" class="btn btn-outline-light btn-lg">
+                            <i class="fas fa-user-plus me-2"></i>
+                            Đăng ký
+                        </a>
                     </div>
-                    <div class="product-item">
-                        <a href="#">
-                            <img src="https://zhomestay.vn/wp-content/uploads/2024/09/z5764692376279_184d90ea3d694c36b51785f8d64d0b12-563x563.jpg.webp"
-                                 alt="Product" />
-                        </a>
-                        <a href="#"><h3>Product Name 2</h3></a>
-                        <a href="#"><p>Product Description 2</p></a>
-                        <button class="btn">View Details</button>
+                }
+                else
+                {
+                    <div class="alert alert-light" role="alert">
+                        <i class="fas fa-user-check me-2"></i>
+                        Chào mừng bạn, <strong>@ViewBag.Username</strong>!
+                        <span class="badge bg-primary ms-2">@ViewBag.UserRole</span>
                     </div>
-                    <div class="product-item">
-                        <a href="#">
-                            <img src="https://zhomestay.vn/wp-content/uploads/2024/09/z5764692376279_184d90ea3d694c36b51785f8d64d0b12-563x563.jpg.webp"
-                                 alt="Product" />
-                        </a>
-                        <a href="#"><h3>Product Name 3</h3></a>
-                        <a href="#"><p>Product Description 3</p></a>
-                        <button class="btn">View Details</button>
-                    </div>
-                    <div class="product-item">
-                        <a href="#">
-                            <img src="https://zhomestay.vn/wp-content/uploads/2024/09/z5764692376279_184d90ea3d694c36b51785f8d64d0b12-563x563.jpg.webp"
-                                 alt="Product" />
-                        </a>
-                        <a href="#"><h3>Product Name 4</h3></a>
-                        <a href="#"><p>Product Description 4</p></a>
-                        <button class="btn">View Details</button>
-                    </div>
-                    <div class="product-item">
-                        <a href="#">
-                            <img src="https://zhomestay.vn/wp-content/uploads/2024/09/z5764692376279_184d90ea3d694c36b51785f8d64d0b12-563x563.jpg.webp"
-                                 alt="Product" />
-                        </a>
-                        <a href="#"><h3>Product Name 4</h3></a>
-                        <a href="#"><p>Product Description 4</p></a>
-                        <button class="btn">View Details</button>
+                }
+            </div>
+            <div class="col-lg-6">
+                <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+                    alt="Homestay" class="img-fluid rounded shadow">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Search Section -->
+<div class="search-section py-5 bg-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow">
+                    <div class="card-body p-4">
+                        <h3 class="text-center mb-4">
+                            <i class="fas fa-search me-2"></i>
+                            Tìm homestay phù hợp
+                        </h3>
+                        <form>
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <label class="form-label">Địa điểm</label>
+                                    <input type="text" class="form-control" placeholder="Nhập địa điểm...">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Ngày đến</label>
+                                    <input type="date" class="form-control">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Ngày đi</label>
+                                    <input type="date" class="form-control">
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="form-label">Khách</label>
+                                    <select class="form-select">
+                                        <option>1</option>
+                                        <option>2</option>
+                                        <option>3</option>
+                                        <option>4+</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="text-center mt-4">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-search me-2"></i>
+                                    Tìm kiếm
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</main>
+</div>
+
+<!-- Featured Homestays -->
+<div class="container py-5">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="text-center mb-5">
+                <i class="fas fa-star me-2"></i>
+                Homestay nổi bật
+            </h2>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-4 col-md-6">
+            <div class="card h-100 shadow-sm">
+                <img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2068&q=80"
+                    class="card-img-top" alt="Homestay 1" style="height: 200px; object-fit: cover;">
+                <div class="card-body">
+                    <h5 class="card-title">Villa Biển Nha Trang</h5>
+                    <p class="card-text text-muted">
+                        <i class="fas fa-map-marker-alt me-1"></i>
+                        Nha Trang, Khánh Hòa
+                    </p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="rating">
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <span class="ms-1">5.0</span>
+                        </div>
+                        <span class="text-primary fw-bold">$50/đêm</span>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <a href="#" class="btn btn-outline-primary w-100">
+                        <i class="fas fa-eye me-2"></i>
+                        Xem chi tiết
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6">
+            <div class="card h-100 shadow-sm">
+                <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+                    class="card-img-top" alt="Homestay 2" style="height: 200px; object-fit: cover;">
+                <div class="card-body">
+                    <h5 class="card-title">Căn hộ Đà Lạt View</h5>
+                    <p class="card-text text-muted">
+                        <i class="fas fa-map-marker-alt me-1"></i>
+                        Đà Lạt, Lâm Đồng
+                    </p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="rating">
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="far fa-star text-warning"></i>
+                            <span class="ms-1">4.8</span>
+                        </div>
+                        <span class="text-primary fw-bold">$35/đêm</span>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <a href="#" class="btn btn-outline-primary w-100">
+                        <i class="fas fa-eye me-2"></i>
+                        Xem chi tiết
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6">
+            <div class="card h-100 shadow-sm">
+                <img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+                    class="card-img-top" alt="Homestay 3" style="height: 200px; object-fit: cover;">
+                <div class="card-body">
+                    <h5 class="card-title">Nhà gỗ Sapa</h5>
+                    <p class="card-text text-muted">
+                        <i class="fas fa-map-marker-alt me-1"></i>
+                        Sapa, Lào Cai
+                    </p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="rating">
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <span class="ms-1">4.9</span>
+                        </div>
+                        <span class="text-primary fw-bold">$40/đêm</span>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <a href="#" class="btn btn-outline-primary w-100">
+                        <i class="fas fa-eye me-2"></i>
+                        Xem chi tiết
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Features Section -->
+<div class="bg-light py-5">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="feature-item">
+                    <i class="fas fa-shield-alt fa-3x text-primary mb-3"></i>
+                    <h5>An toàn & Bảo mật</h5>
+                    <p class="text-muted">Thanh toán an toàn, thông tin được bảo mật</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="feature-item">
+                    <i class="fas fa-clock fa-3x text-primary mb-3"></i>
+                    <h5>Hỗ trợ 24/7</h5>
+                    <p class="text-muted">Đội ngũ hỗ trợ luôn sẵn sàng giúp đỡ</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="feature-item">
+                    <i class="fas fa-medal fa-3x text-primary mb-3"></i>
+                    <h5>Chất lượng cao</h5>
+                    <p class="text-muted">Homestay được kiểm định chất lượng</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="feature-item">
+                    <i class="fas fa-percent fa-3x text-primary mb-3"></i>
+                    <h5>Giá tốt nhất</h5>
+                    <p class="text-muted">Cam kết giá tốt nhất thị trường</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
