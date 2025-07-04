@@ -1,0 +1,49 @@
+﻿@model IEnumerable<HomestayBooking.Models.Rooms>
+@{
+    ViewBag.Title = "Danh sách phòng";
+    Layout = "~/Views/Shared/_LayoutOwner.cshtml";
+    int homestayId = ViewBag.HomestayID ?? 0;
+    string homestayName = ViewBag.HomestayName ?? "";
+}
+<h2>Danh sách phòng - @homestayName</h2>
+<p>
+    @Html.ActionLink("Thêm phòng mới", "Create", new { homestayId = homestayId }, new { @class = "btn btn-primary" })
+    @Html.ActionLink("Quay lại Homestay", "Details", "Homestays", new { id = homestayId }, new { @class = "btn btn-secondary" })
+</p>
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Tên phòng</th>
+            <th>Loại</th>
+            <th>Giá/đêm</th>
+            <th>Sức chứa</th>
+            <th>Trạng thái</th>
+            <th>Ảnh đại diện</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        var img = item.RoomImages.FirstOrDefault();
+        <tr>
+            <td>@item.Name</td>
+            <td>@item.Type</td>
+            <td>@item.PricePerNight</td>
+            <td>@item.Capacity</td>
+            <td>@(item.Available == true ? "Còn phòng" : "Hết phòng")</td>
+            <td>
+                @if (img != null)
+                {
+                    <img src="@Url.Content(img.ImageURL)" style="max-width:80px;max-height:60px;object-fit:cover;" />
+                }
+            </td>
+            <td>
+                @Html.ActionLink("Chi tiết", "Details", new { id = item.RoomID }, new { @class = "btn btn-info btn-sm" })
+                @Html.ActionLink("Sửa", "Edit", new { id = item.RoomID }, new { @class = "btn btn-warning btn-sm" })
+                @Html.ActionLink("Xóa", "Delete", new { id = item.RoomID }, new { @class = "btn btn-danger btn-sm" })
+            </td>
+        </tr>
+    }
+    </tbody>
+</table> 

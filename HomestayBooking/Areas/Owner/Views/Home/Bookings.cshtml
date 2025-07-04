@@ -1,0 +1,31 @@
+@model IEnumerable<HomestayBooking.Models.Bookings>
+@{
+    ViewBag.Title = "Đơn đặt phòng của tôi";
+    Layout = "~/Views/Shared/_LayoutOwner.cshtml";
+}
+<h2 class="mb-4">Đơn đặt phòng của tôi</h2>
+<table class="table table-bordered table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>Mã đơn</th>
+            <th>Khách hàng</th>
+            <th>Phòng</th>
+            <th>Ngày nhận</th>
+            <th>Ngày trả</th>
+            <th>Trạng thái</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.BookingID</td>
+            <td>@(item.Account != null ? item.Account.UserName : "N/A")</td>
+            <td>@(item.Rooms != null ? item.Rooms.Name : "N/A")</td>
+            <td>@item.CheckInDate.ToString("dd/MM/yyyy")</td>
+            <td>@item.CheckOutDate.ToString("dd/MM/yyyy")</td>
+            <td>@item.Status</td>
+        </tr>
+    }
+    </tbody>
+</table> 

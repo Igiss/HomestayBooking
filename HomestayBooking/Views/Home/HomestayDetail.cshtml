@@ -1,0 +1,247 @@
+﻿@model HomestayBooking.Models.Homestay
+@using System.Linq
+@{
+    ViewBag.Title = "Chi tiết Homestay - " + Model.Name;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var roomImages = Model.Rooms != null ? Model.Rooms.SelectMany(r => r.RoomImages).Where(img => !string.IsNullOrEmpty(img.ImageURL)).ToList() : new List<HomestayBooking.Models.RoomImages>();
+    var totalRooms = Model.Rooms != null ? Model.Rooms.Count : 0;
+    // Lấy tất cả review của các phòng thuộc homestay này
+    var allReviews = Model.Rooms != null ? Model.Rooms.SelectMany(r => r.Bookings != null ? r.Bookings.Where(b => b.Reviews != null).Select(b => b.Reviews) : new List<HomestayBooking.Models.Reviews>()).Where(rv => rv != null && rv.Rating != null).ToList() : new List<HomestayBooking.Models.Reviews>();
+    var avgRating = allReviews.Any() ? allReviews.Average(rv => rv.Rating.Value) : 0;
+    var ratingCount = allReviews.Count;
+    // Tiện ích mẫu (có thể lấy từ Description hoặc hardcode)
+    var amenities = new[] {
+        new { Icon = "fa-wifi", Name = "WiFi miễn phí" },
+        new { Icon = "fa-snowflake", Name = "Điều hòa" },
+        new { Icon = "fa-tv", Name = "TV" },
+        new { Icon = "fa-utensils", Name = "Bếp" },
+        new { Icon = "fa-car", Name = "Chỗ đỗ xe" },
+        new { Icon = "fa-shower", Name = "Phòng tắm riêng" },
+        new { Icon = "fa-tshirt", Name = "Máy giặt" },
+        new { Icon = "fa-lock", Name = "Tủ khóa" }
+    };
+}
+@section Styles {
+    <link href="~/Content/homestay-detail.css" rel="stylesheet" />
+}
+<div class="homestay-detail-creative container py-4">
+    <div class="row">
+        <!-- Gallery -->
+        <div class="col-lg-7 mb-4 mb-lg-0">
+            <div class="gallery-main mb-2">
+                @if (roomImages.Any()) {
+                    <img src="@Url.Content(roomImages[0].ImageURL)" class="img-fluid rounded shadow gallery-main-img" alt="Ảnh homestay chính" style="max-height:400px;object-fit:cover;width:100%;cursor:pointer;" data-bs-toggle="modal" data-bs-target="#galleryModal" />
+                } else {
+                    <div class="d-flex align-items-center justify-content-center bg-light rounded" style="height:400px;">
+                        <i class="fas fa-image text-muted" style="font-size:64px;"></i>
+                    </div>
+                }
+            </div>
+            <div class="gallery-thumbs d-flex gap-2">
+                @for (int i = 1; i < Math.Min(roomImages.Count, 7); i++) {
+                    <img src="@Url.Content(roomImages[i].ImageURL)" class="img-thumbnail gallery-thumb" style="height:70px;width:90px;object-fit:cover;cursor:pointer;" data-bs-toggle="modal" data-bs-target="#galleryModal" alt="Ảnh phụ @(i+1)" />
+                }
+                @if (roomImages.Count > 7) {
+                    <div class="gallery-thumb-more d-flex align-items-center justify-content-center bg-secondary text-white rounded" style="height:70px;width:90px;cursor:pointer;font-weight:bold;font-size:18px;" data-bs-toggle="modal" data-bs-target="#galleryModal">
+                        +@(roomImages.Count-7) ảnh
+                    </div>
+                }
+            </div>
+        </div>
+        <!-- Info + Booking -->
+        <div class="col-lg-5 d-flex flex-column justify-content-between">
+            <div class="homestay-info-box p-4 shadow rounded bg-white mb-4">
+                <h2 class="mb-2 fw-bold">@Model.Name</h2>
+                <div class="mb-2 text-muted"><i class="fas fa-map-marker-alt me-2 text-danger"></i>@Model.Address</div>
+                <div class="mb-2">
+                    <span class="badge bg-success fs-6 me-2"><i class="fas fa-door-open me-1"></i>@totalRooms phòng</span>
+                    <span class="badge bg-primary fs-6"><i class="fas fa-star me-1"></i>@(avgRating > 0 ? avgRating.ToString("0.0") : "-") (@ratingCount đánh giá)</span>
+                </div>
+                <div class="mb-2">
+                    <span class="text-muted"><i class="fas fa-info-circle me-2"></i>@Model.Description</span>
+                </div>
+                <div class="amenities-list row mt-3">
+                    @foreach (var amenity in amenities) {
+                        <div class="col-6 col-md-4 mb-2 d-flex align-items-center">
+                            <i class="fas @amenity.Icon me-2 text-primary"></i> <span>@amenity.Name</span>
+                        </div>
+                    }
+                </div>
+            </div>
+            <!-- Booking form -->
+            <div class="booking-form-box p-4 shadow rounded bg-white">
+                <div class="d-flex align-items-center mb-3">
+                    <span class="fs-4 fw-bold text-danger">550,000</span>
+                    <span class="ms-2 text-muted">VNĐ / đêm</span>
+                </div>
+                <form>
+                    <div class="mb-2">
+                        <label class="form-label">Ngày nhận phòng</label>
+                        <input type="date" class="form-control" min="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label">Ngày trả phòng</label>
+                        <input type="date" class="form-control" min="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Số lượng phòng</label>
+                        <input type="number" class="form-control" min="1" value="1" />
+                    </div>
+                    <button type="submit" class="btn btn-danger w-100 py-2 fw-bold">Đặt phòng ngay</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Mô tả chi tiết -->
+    <div class="row mt-5">
+        <div class="col-lg-8">
+            <h4 class="fw-bold mb-3"><i class="fas fa-info-circle me-2"></i>Thông tin chi tiết</h4>
+            <div class="homestay-detail-desc bg-white rounded shadow-sm p-4 mb-4">
+                @Html.Raw(Model.Description)
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="homestay-rating-box bg-white rounded shadow-sm p-4 mb-4">
+                <h5 class="fw-bold mb-2"><i class="fas fa-star text-warning me-2"></i>Đánh giá khách hàng</h5>
+                <div class="d-flex align-items-center mb-2">
+                    <span class="fs-2 fw-bold text-warning">@(avgRating > 0 ? avgRating.ToString("0.0") : "-")</span>
+                    <span class="ms-2">/ 5.0</span>
+                </div>
+                <div class="mb-2">
+                    @for (int i = 1; i <= 5; i++) {
+                        if (i <= Math.Round(avgRating)) {
+                            <i class="fas fa-star text-warning"></i>
+                        } else {
+                            <i class="far fa-star text-warning"></i>
+                        }
+                    }
+                    <span class="ms-2">(@ratingCount đánh giá)</span>
+                </div>
+                <a href="#reviews" class="btn btn-outline-primary btn-sm mt-2">Xem tất cả đánh giá</a>
+            </div>
+        </div>
+    </div>
+    <!-- Danh sách phòng -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <h4 class="fw-bold mb-4 text-center"><i class="fas fa-bed me-2"></i>Danh sách phòng khả dụng</h4>
+        </div>
+        @if (Model.Rooms != null && Model.Rooms.Any(r => r.Available == true)) {
+            foreach (var room in Model.Rooms.Where(r => r.Available == true)) {
+                var firstImg = (room.RoomImages != null && room.RoomImages.Any(img => !string.IsNullOrEmpty(img.ImageURL))) ? room.RoomImages.First(img => !string.IsNullOrEmpty(img.ImageURL)).ImageURL : null;
+                var priceText = (room.PricePerNight != null) ? room.PricePerNight.Value.ToString("N0") : "Liên hệ";
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card h-100 shadow-sm border-0 room-card-hover">
+                        @if (!string.IsNullOrEmpty(firstImg)) {
+                            <img src="@Url.Content(firstImg)" class="card-img-top" alt="@room.Name" style="height: 200px; object-fit: cover;">
+                        } else {
+                            <div class="card-img-top d-flex align-items-center justify-content-center" style="height: 200px; background-color: #f8f9fa;">
+                                <div class="text-center text-muted">
+                                    <i class="fas fa-image" style="font-size: 32px; margin-bottom: 5px;"></i>
+                                    <br><small>Không có ảnh</small>
+                                </div>
+                            </div>
+                        }
+                        <div class="card-body">
+                            <h5 class="card-title">@room.Name</h5>
+                            <div class="mb-2">
+                                <span class="badge bg-info text-dark">@room.Type</span>
+                                <span class="badge bg-secondary ms-2"><i class="fas fa-users me-1"></i>@(room.Capacity ?? 0) khách</span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="text-primary fw-bold">@priceText VNĐ/đêm</span>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent border-0">
+                            <a href="@Url.Action("RoomDetail", "Home", new { id = room.RoomID })" class="btn btn-outline-primary w-100">
+                                <i class="fas fa-eye me-2"></i>
+                                Xem chi tiết phòng
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        } else {
+            <div class="col-12 text-center">
+                <div class="alert alert-info">Hiện tại chưa có phòng khả dụng cho homestay này.</div>
+            </div>
+        }
+    </div>
+    <!-- Đánh giá homestay -->
+    <div class="row mt-4" id="reviews">
+        <div class="col-lg-8">
+            <h4 class="fw-bold mb-3"><i class="fas fa-star text-warning me-2"></i>Đánh giá homestay</h4>
+            @if (TempData["ReviewError"] != null)
+            {
+                <div class="alert alert-danger">@TempData["ReviewError"]</div>
+            }
+            @if (TempData["ReviewSuccess"] != null)
+            {
+                <div class="alert alert-success">@TempData["ReviewSuccess"]</div>
+            }
+            @{
+                bool canReview = false;
+                if (Session["UserID"] != null && Model.Rooms != null)
+                {
+                    int userId = (int)Session["UserID"];
+                    var userBookings = Model.Rooms.SelectMany(r => r.Bookings != null ? r.Bookings.Where(b => b.CustomerID == userId) : new List<HomestayBooking.Models.Bookings>()).ToList();
+                    var reviewedBookingIds = userBookings.Where(b => b.Reviews != null).Select(b => b.BookingID).ToList();
+                    // Nếu có ít nhất 1 booking chưa review
+                    canReview = userBookings.Any(b => b.Reviews == null);
+                }
+            }
+            @if (canReview)
+            {
+                <form method="post" action="@Url.Action("PostReview", "Home")">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="homestayId" value="@Model.HomestayID" />
+                    <div class="mb-2">
+                        <label class="form-label">Chọn số sao</label>
+                        <select name="rating" class="form-select" required>
+                            <option value="">-- Chọn --</option>
+                            <option value="5">5 - Tuyệt vời</option>
+                            <option value="4">4 - Rất tốt</option>
+                            <option value="3">3 - Bình thường</option>
+                            <option value="2">2 - Tạm được</option>
+                            <option value="1">1 - Kém</option>
+                        </select>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label">Nhận xét</label>
+                        <textarea name="comment" class="form-control" rows="3" maxlength="500" placeholder="Nhận xét của bạn..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Gửi đánh giá</button>
+                </form>
+            }
+            else if (Session["UserID"] == null)
+            {
+                <div class="alert alert-info">Bạn cần <a href="@Url.Action("Login", "Accounts")">đăng nhập</a> và đặt phòng tại homestay này để đánh giá.</div>
+            }
+            else
+            {
+                <div class="alert alert-success">Bạn đã đánh giá cho homestay này hoặc chưa đặt phòng tại đây.</div>
+            }
+        </div>
+    </div>
+    <!-- Modal Gallery -->
+    <div class="modal fade" id="galleryModal" tabindex="-1" aria-labelledby="galleryModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="galleryModalLabel">Thư viện ảnh Homestay</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        @foreach (var img in roomImages) {
+                            <div class="col-md-4 mb-3">
+                                <img src="@Url.Content(img.ImageURL)" class="img-fluid img-thumbnail" style="max-height:200px;object-fit:cover;" />
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

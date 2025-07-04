@@ -1,0 +1,200 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Arial", sans-serif;
+}
+
+body {
+    background-color: white;
+    display: flex;
+    height: 100vh;
+}
+ul{
+    padding-left: 0;
+}
+.sidebar {
+    width: 300px;
+    background-color: #ffffff;
+    padding: 1.5rem 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
+    border-radius: 0 1rem 1rem 0;
+    
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin: 7px 7px 0 40px;
+    color: #2c3e50;
+    position: relative; /* Thêm vào */
+    padding-left: 40px; /* Tạo khoảng trống cho nút toggle */
+}
+
+.sidebar__nav ul {
+    list-style: none;
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.sidebar__nav a {
+    text-decoration: none;
+    color: #2c3e50;
+    font-weight: 500;
+    padding: 0.7rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    border-radius: 8px;
+}
+
+    .sidebar__nav li.active a,
+    .sidebar__nav a:hover {
+        background-color: #e0f2f1;
+        color: #00796b;
+    }
+
+.sidebar__footer {
+    margin-top: 2rem;
+    text-align: center;
+}
+
+    .sidebar__footer img {
+        width: 100%;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+    }
+
+    .sidebar__footer p {
+        margin-bottom: 1rem;
+        font-weight: bold;
+        color: #00796b;
+    }
+
+.user {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #f5f5f5;
+    padding: 0.5rem;
+    border-radius: 8px;
+}
+
+    .user img {
+        border-radius: 50%;
+    }
+
+    .user small {
+        color: #777;
+        font-size: 0.75rem;
+    }
+
+.sidebar.collapsed {
+    width: 100px;
+    padding: 1.5rem 0.5rem;
+    transition: width 0.3s ease;
+}
+
+    .sidebar.collapsed .sidebar__nav span,
+    .sidebar.collapsed .sidebar__footer p,
+    .sidebar.collapsed .user-info {
+        display: none;
+    }
+
+    .sidebar.collapsed .logo {
+        display: none;
+    }
+
+    .sidebar.collapsed .sidebar__nav a {
+        justify-content: center;
+        align-items: center;
+        padding: 0.7rem 0;
+
+    }
+
+    .sidebar.collapsed .sidebar__nav a span {
+        display: none !important;
+    }
+
+    .sidebar.collapsed .sidebar__footer img {
+        display: none;
+    }
+
+    .sidebar.collapsed .user {
+        justify-content: center;
+        background: transparent;
+        padding: 0;
+    }
+
+        .sidebar.collapsed .user img {
+            width: 32px;
+            height: 32px;
+        }
+
+/* Nút toggle */
+.toggle-btn {
+    position: absolute;
+    left: 10px;
+    border: none;
+    background-color: #ffffff;
+    font-size: 16px;
+    width: 30px;
+    height: 30px;
+    color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: all 0.3s ease;
+    font-size: 25px;
+    left: 30px;
+}
+
+.sidebar.collapsed .toggle-btn {
+    color: black;
+    position: static; /* Đưa nút toggle về vị trí bình thường */
+    transform: none;
+    margin: 0 auto; /* Căn giữa */
+}
+
+.search-bar {
+    display: flex;
+    justify-content: flex-end; /* đẩy sang phải */
+    align-items: center;
+    padding: 20px;
+    gap: 10px;
+}
+
+    .search-bar input {
+        padding: 8px 12px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        width: 200px;
+    }
+
+    .search-bar button {
+        padding: 8px 16px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+        .search-bar button:hover {
+            background-color: #0056b3;
+        }
+
+.sidebar__nav a i[data-feather] {
+    margin: 0 auto;
+    display: block;
+}
+

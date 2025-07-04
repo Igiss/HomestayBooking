@@ -19,11 +19,11 @@
                 @if (!User.Identity.IsAuthenticated)
                 {
                     <div class="d-flex gap-3">
-                        <a href="/Login" class="btn btn-light btn-lg">
+                        <a href="@Url.Action("Login", "Accounts")" class="btn btn-light btn-lg">
                             <i class="fas fa-sign-in-alt me-2"></i>
                             Đăng nhập
                         </a>
-                        <a href="/Register" class="btn btn-outline-light btn-lg">
+                        <a href="@Url.Action("Create", "Accounts")" class="btn btn-outline-light btn-lg">
                             <i class="fas fa-user-plus me-2"></i>
                             Đăng ký
                         </a>
@@ -34,7 +34,12 @@
                     <div class="alert alert-light" role="alert">
                         <i class="fas fa-user-check me-2"></i>
                         Chào mừng bạn, <strong>@ViewBag.Username</strong>!
-                        <span class="badge bg-primary ms-2">@ViewBag.UserRole</span>
+                    </div>
+                    <div class="d-flex gap-3">
+                        <a href="@Url.Action("Rooms", "Home")" class="btn btn-light btn-lg">
+                            <i class="fas fa-bed me-2"></i>
+                            Xem phòng
+                        </a>
                     </div>
                 }
             </div>
@@ -95,112 +100,127 @@
     </div>
 </div>
 
-<!-- Featured Homestays -->
+<!-- Featured Rooms Section -->
+@if (ViewBag.FeaturedRooms != null && ((List<HomestayBooking.Models.Rooms>)ViewBag.FeaturedRooms).Any())
+{
 <div class="container py-5">
     <div class="row">
         <div class="col-12">
             <h2 class="text-center mb-5">
                 <i class="fas fa-star me-2"></i>
-                Homestay nổi bật
+                    Phòng nổi bật
             </h2>
         </div>
     </div>
-
     <div class="row g-4">
+            @foreach (var room in (List<HomestayBooking.Models.Rooms>)ViewBag.FeaturedRooms)
+            {
+                var priceText = (room.PricePerNight != null) ? room.PricePerNight.Value.ToString("N0") : "Liên hệ";
         <div class="col-lg-4 col-md-6">
             <div class="card h-100 shadow-sm">
-                <img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2068&q=80"
-                    class="card-img-top" alt="Homestay 1" style="height: 200px; object-fit: cover;">
+                        @if (room.RoomImages != null && room.RoomImages.Any() && !string.IsNullOrEmpty(room.RoomImages.First().ImageURL))
+                        {
+                            <img src="@Url.Content(room.RoomImages.First().ImageURL)"
+                                 class="card-img-top"
+                                 alt="@room.Name"
+                                 style="height: 200px; object-fit: cover;">
+                        }
+                        else
+                        {
+                            <div class="card-img-top d-flex align-items-center justify-content-center"
+                                 style="height: 200px; background-color: #f8f9fa;">
+                                <div class="text-center text-muted">
+                                    <i class="fas fa-image" style="font-size: 32px; margin-bottom: 5px;"></i>
+                                    <br><small>Không có ảnh</small>
+                                </div>
+                            </div>
+                        }
                 <div class="card-body">
-                    <h5 class="card-title">Villa Biển Nha Trang</h5>
+                            <h5 class="card-title">@room.Name</h5>
                     <p class="card-text text-muted">
-                        <i class="fas fa-map-marker-alt me-1"></i>
-                        Nha Trang, Khánh Hòa
+                                <i class="fas fa-home me-1"></i>
+                                @room.Homestay.Name
                     </p>
                     <div class="d-flex justify-content-between align-items-center">
-                        <div class="rating">
-                            <i class="fas fa-star text-warning"></i>
-                            <i class="fas fa-star text-warning"></i>
-                            <i class="fas fa-star text-warning"></i>
-                            <i class="fas fa-star text-warning"></i>
-                            <i class="fas fa-star text-warning"></i>
-                            <span class="ms-1">5.0</span>
-                        </div>
-                        <span class="text-primary fw-bold">$50/đêm</span>
+                                <span class="text-primary fw-bold">@priceText VNĐ/đêm</span>
                     </div>
                 </div>
                 <div class="card-footer bg-transparent">
-                    <a href="#" class="btn btn-outline-primary w-100">
+                            <a href="@Url.Action("RoomDetail", "Home", new { id = room.RoomID })" class="btn btn-outline-primary w-100">
                         <i class="fas fa-eye me-2"></i>
                         Xem chi tiết
                     </a>
                 </div>
             </div>
         </div>
-
-        <div class="col-lg-4 col-md-6">
-            <div class="card h-100 shadow-sm">
-                <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
-                    class="card-img-top" alt="Homestay 2" style="height: 200px; object-fit: cover;">
-                <div class="card-body">
-                    <h5 class="card-title">Căn hộ Đà Lạt View</h5>
-                    <p class="card-text text-muted">
-                        <i class="fas fa-map-marker-alt me-1"></i>
-                        Đà Lạt, Lâm Đồng
-                    </p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="rating">
-                            <i class="fas fa-star text-warning"></i>
-                            <i class="fas fa-star text-warning"></i>
-                            <i class="fas fa-star text-warning"></i>
-                            <i class="fas fa-star text-warning"></i>
-                            <i class="far fa-star text-warning"></i>
-                            <span class="ms-1">4.8</span>
+            }
                         </div>
-                        <span class="text-primary fw-bold">$35/đêm</span>
+        <div class="row mt-4">
+            <div class="col-12 text-center">
+                <a href="@Url.Action("Rooms", "Home")" class="btn btn-primary btn-lg">
+                    <i class="fas fa-list me-2"></i>
+                    Xem tất cả phòng
+                </a>
                     </div>
                 </div>
-                <div class="card-footer bg-transparent">
-                    <a href="#" class="btn btn-outline-primary w-100">
-                        <i class="fas fa-eye me-2"></i>
-                        Xem chi tiết
-                    </a>
                 </div>
+}
+
+<!-- Featured Homestays -->
+@if (ViewBag.Homestays != null && ((List<HomestayBooking.Models.Homestay>)ViewBag.Homestays).Any())
+{
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-12">
+                <h2 class="text-center mb-5">
+                    <i class="fas fa-home me-2"></i>
+                    Danh sách Homestay nổi bật
+                </h2>
             </div>
         </div>
-
+        <div class="row g-4">
+            @foreach (var homestay in (List<HomestayBooking.Models.Homestay>)ViewBag.Homestays)
+            {
+                var firstRoomWithImg = homestay.Rooms != null ? homestay.Rooms.FirstOrDefault(r => r.RoomImages.Any(img => !string.IsNullOrEmpty(img.ImageURL))) : null;
+                var firstImg = (firstRoomWithImg != null && firstRoomWithImg.RoomImages.Any(img => !string.IsNullOrEmpty(img.ImageURL))) ? firstRoomWithImg.RoomImages.First(img => !string.IsNullOrEmpty(img.ImageURL)).ImageURL : null;
         <div class="col-lg-4 col-md-6">
             <div class="card h-100 shadow-sm">
-                <img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
-                    class="card-img-top" alt="Homestay 3" style="height: 200px; object-fit: cover;">
+                        @if (!string.IsNullOrEmpty(firstImg))
+                        {
+                            <img src="@Url.Content(firstImg)"
+                                 class="card-img-top"
+                                 alt="@homestay.Name"
+                                 style="height: 200px; object-fit: cover;">
+                        }
+                        else
+                        {
+                            <div class="card-img-top d-flex align-items-center justify-content-center"
+                                 style="height: 200px; background-color: #f8f9fa;">
+                                <div class="text-center text-muted">
+                                    <i class="fas fa-image" style="font-size: 32px; margin-bottom: 5px;"></i>
+                                    <br><small>Không có ảnh</small>
+                                </div>
+                            </div>
+                        }
                 <div class="card-body">
-                    <h5 class="card-title">Nhà gỗ Sapa</h5>
+                            <h5 class="card-title">@homestay.Name</h5>
                     <p class="card-text text-muted">
                         <i class="fas fa-map-marker-alt me-1"></i>
-                        Sapa, Lào Cai
-                    </p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="rating">
-                            <i class="fas fa-star text-warning"></i>
-                            <i class="fas fa-star text-warning"></i>
-                            <i class="fas fa-star text-warning"></i>
-                            <i class="fas fa-star text-warning"></i>
-                            <i class="fas fa-star text-warning"></i>
-                            <span class="ms-1">4.9</span>
-                        </div>
-                        <span class="text-primary fw-bold">$40/đêm</span>
-                    </div>
+                                @homestay.Address
+                            </p>
                 </div>
                 <div class="card-footer bg-transparent">
-                    <a href="#" class="btn btn-outline-primary w-100">
+                            <a href="@Url.Action("HomestayDetail", "Home", new { id = homestay.HomestayID })" class="btn btn-outline-primary w-100">
                         <i class="fas fa-eye me-2"></i>
                         Xem chi tiết
                     </a>
                 </div>
             </div>
+                </div>
+            }
         </div>
     </div>
-</div>
+}
 
 <!-- Features Section -->
 <div class="bg-light py-5">

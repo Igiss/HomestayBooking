@@ -1,0 +1,23 @@
+﻿@model HomestayBooking.Models.Account
+@{
+    ViewBag.Title = "Chi tiết tài khoản";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>Chi tiết tài khoản</h2>
+<div>
+    <h4>Account</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>ID</dt>
+        <dd>@Model.AccountID</dd>
+        <dt>Tên đăng nhập</dt>
+        <dd>@Model.UserName</dd>
+        <dt>Vai trò</dt>
+        <dd>@Model.Role</dd>
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Sửa", "Edit", new { id = Model.AccountID }) |
+    @Html.ActionLink("Quay lại danh sách", "Index")
+</p> 

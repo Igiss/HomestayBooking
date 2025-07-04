@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="ce711ad61fec4d2b9bad2b440589d829" Name="Diagram1">
+      <Diagram DiagramId="58e70a0ffe694297a38e9fdb219bfbaf" Name="Diagram1">
         <EntityTypeShape EntityType="HomestayBookingModel.Account" Width="1.5" PointX="0.75" PointY="6.125" IsExpanded="true" />
         <EntityTypeShape EntityType="HomestayBookingModel.Bookings" Width="1.5" PointX="7.5" PointY="5.875" IsExpanded="true" />
         <EntityTypeShape EntityType="HomestayBookingModel.Homestay" Width="1.5" PointX="3" PointY="10" IsExpanded="true" />

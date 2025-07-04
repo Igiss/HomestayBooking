@@ -1,0 +1,102 @@
+@{
+    ViewBag.Title = "Test Setup";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Test Setup - Kiểm tra tài khoản</h4>
+                </div>
+                <div class="card-body">
+                    @if (!string.IsNullOrEmpty(ViewBag.Message))
+                    {
+                        <div class="alert alert-success">
+                            @ViewBag.Message
+                        </div>
+                    }
+                    
+                    @if (!string.IsNullOrEmpty(ViewBag.Error))
+                    {
+                        <div class="alert alert-danger">
+                            @ViewBag.Error
+                        </div>
+                    }
+                    
+                    <h5>Danh sách tài khoản trong database:</h5>
+                    @if (ViewBag.Accounts != null)
+                    {
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Username</th>
+                                    <th>Password</th>
+                                    <th>Role (Raw)</th>
+                                    <th>Role (Length)</th>
+                                    <th>Role (Trimmed)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var account in ViewBag.Accounts)
+                                {
+                                    <tr>
+                                        <td>@account.AccountID</td>
+                                        <td>@account.UserName</td>
+                                        <td>@account.Password</td>
+                                        <td>
+                                            <code>@account.Role</code>
+                                        </td>
+                                        <td>@(account.Role != null ? account.Role.Length : 0)</td>
+                                        <td>
+                                            <code>@(account.Role != null ? account.Role.Trim() : "")</code>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    
+                    <hr />
+                    
+                    <h5>Test Login:</h5>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h6>Đăng nhập Host (Owner)</h6>
+                                </div>
+                                <div class="card-body">
+                                    <p><strong>Username:</strong> host</p>
+                                    <p><strong>Password:</strong> 123456</p>
+                                    <a href="@Url.Action("Login", "Accounts")" class="btn btn-primary">
+                                        <i class="fas fa-sign-in-alt me-1"></i>
+                                        Đăng nhập
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h6>Đăng nhập Admin</h6>
+                                </div>
+                                <div class="card-body">
+                                    <p><strong>Username:</strong> admin</p>
+                                    <p><strong>Password:</strong> 123456</p>
+                                    <a href="@Url.Action("Login", "Accounts")" class="btn btn-success">
+                                        <i class="fas fa-sign-in-alt me-1"></i>
+                                        Đăng nhập
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

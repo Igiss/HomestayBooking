@@ -1,0 +1,54 @@
+﻿@model IEnumerable<HomestayBooking.Models.Homestay>
+@{
+    ViewBag.Title = "Quản lý Homestay";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<!-- Đảm bảo meta charset nếu layout không có -->
+<!-- <meta charset="utf-8" /> -->
+
+<h2>Quản lý Homestay</h2>
+
+<p>
+    @Html.ActionLink("Tạo mới homestay", "Create", null, new { @class = "btn btn-primary" })
+</p>
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Tên homestay</th>
+                <th>Chủ homestay</th>
+                <th>Địa chỉ</th>
+                <th>Trạng thái</th>
+                <th>Ngày tạo</th>
+                <th>Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.HomestayID</td>
+                    <td>@item.Name</td>
+                    <td>@(item.Account != null ? item.Account.UserName : "N/A")</td>
+                    <td>@item.Address</td>
+                    <td>
+                        <span class="badge @(item.Status == "active" ? "bg-success" : "bg-warning")">
+                            @item.Status
+                        </span>
+                    </td>
+                    <td>@(item.CreatedAt != null ? item.CreatedAt.Value.ToString("dd/MM/yyyy") : "N/A")</td>
+                    <td>
+                        <div class="btn-group" role="group">
+                            @Html.ActionLink("Sửa", "Edit", new { id = item.HomestayID }, new { @class = "btn btn-sm btn-warning" })
+                            @Html.ActionLink("Chi tiết", "Details", new { id = item.HomestayID }, new { @class = "btn btn-sm btn-info" })
+                            @Html.ActionLink("Xóa", "Delete", new { id = item.HomestayID }, new { @class = "btn btn-sm btn-danger" })
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div> 

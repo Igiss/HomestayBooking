@@ -17,20 +17,23 @@ namespace HomestayBooking
             routes.MapRoute(
                 name: "Login",
                 url: "Login",
-                defaults: new { controller = "Accounts", action = "Login" }
+                defaults: new { controller = "Accounts", action = "Login" },
+                namespaces: new[] { "HomestayBooking.Controllers" }
             );
 
             routes.MapRoute(
                 name: "Register",
                 url: "Register",
-                defaults: new { controller = "Accounts", action = "Create" }
+                defaults: new { controller = "Accounts", action = "Create" },
+                namespaces: new[] { "HomestayBooking.Controllers" }
             );
 
             // Default route for all other controllers
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional },
+                namespaces: new[] { "HomestayBooking.Controllers" }
             );
         }
     }

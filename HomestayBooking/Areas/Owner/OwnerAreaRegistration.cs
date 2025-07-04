@@ -17,7 +17,8 @@ namespace HomestayBooking.Areas.Owner
             context.MapRoute(
                 "Owner_default",
                 "Owner/{controller}/{action}/{id}",
-                new { action = "Index", id = UrlParameter.Optional }
+                new { action = "Index", id = UrlParameter.Optional },
+                namespaces: new[] { "HomestayBooking.Areas.Owner.Controllers" }
             );
         }
     }

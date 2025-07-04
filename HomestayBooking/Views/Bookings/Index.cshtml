@@ -1,0 +1,67 @@
+﻿@model IEnumerable<HomestayBooking.Models.Bookings>
+@{
+    ViewBag.Title = "Danh sách đơn đặt phòng";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<h2 class="mb-4">Danh sách đơn đặt phòng</h2>
+<p>
+    <a href="@Url.Action("Create")" class="btn btn-primary mb-3"><i class="bi bi-plus-circle"></i> Thêm đơn mới</a>
+</p>
+<table class="table table-bordered table-hover align-middle">
+    <thead class="table-dark text-center">
+        <tr>
+            <th>Mã đơn</th>
+            <th>Khách hàng</th>
+            <th>Phòng</th>
+            <th>Ngày nhận</th>
+            <th>Ngày trả</th>
+            <th>Ngày tạo</th>
+            <th>Trạng thái</th>
+            <th>Thanh toán</th>
+            <th>Đánh giá</th>
+            <th>Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td class="text-center">@item.BookingID</td>
+            <td>@(item.Account != null ? item.Account.UserName : "N/A")</td>
+            <td>@(item.Rooms != null ? item.Rooms.Name : "N/A")</td>
+            <td>@item.CheckInDate.ToString("dd/MM/yyyy")</td>
+            <td>@item.CheckOutDate.ToString("dd/MM/yyyy")</td>
+           
+            <td class="text-center">
+                @if (item.Status == "pending")
+                {
+                    <span class="badge bg-warning text-dark">Chờ duyệt</span>
+                }
+                else if (item.Status == "confirmed")
+                {
+                    <span class="badge bg-success">Đã xác nhận</span>
+                }
+                else if (item.Status == "cancelled")
+                {
+                    <span class="badge bg-danger">Đã hủy</span>
+                }
+                else
+                {
+                    <span class="badge bg-secondary">@item.Status</span>
+                }
+            </td>
+            <td>@(item.Payments != null ? item.Payments.PaymentMethod : "N/A")</td>
+            <td>@(item.Reviews != null ? item.Reviews.Comment : "N/A")</td>
+            <td class="text-center">
+                <a href="@Url.Action("Details", new { id = item.BookingID })" class="btn btn-info btn-sm me-1" title="Chi tiết"><i class="bi bi-eye"></i></a>
+                <a href="@Url.Action("Edit", new { id = item.BookingID })" class="btn btn-warning btn-sm me-1" title="Sửa"><i class="bi bi-pencil-square"></i></a>
+                <a href="@Url.Action("Delete", new { id = item.BookingID })" class="btn btn-danger btn-sm" title="Xóa"><i class="bi bi-trash"></i></a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+@section Scripts {
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+}

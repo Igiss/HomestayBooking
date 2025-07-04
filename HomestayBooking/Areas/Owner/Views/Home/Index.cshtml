@@ -1,31 +1,34 @@
+﻿@model IEnumerable<HomestayBooking.Models.Homestay>
 @{
-    ViewBag.Title = "Trang chủ chủ homestay";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Dashboard - Chủ Homestay";
 }
 
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
-            <div class="page-header">
-                <h1 class="page-title">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="h3 mb-0">
                     <i class="fas fa-home me-2"></i>
-                    Trang chủ chủ homestay
+                    Dashboard - Chủ Homestay
                 </h1>
-                <p class="text-muted">Chào mừng bạn, @ViewBag.Username!</p>
+                <div class="text-muted">
+                    Xin chào, <strong>@ViewBag.Username</strong>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="row">
+    <!-- Thống kê tổng quan -->
+    <div class="row mb-4">
         <div class="col-xl-3 col-md-6 mb-4">
             <div class="card border-left-primary shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                Homestay của tôi
+                                Tổng Homestay
                             </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">3</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.TotalHomestay</div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-home fa-2x text-gray-300"></i>
@@ -41,12 +44,12 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                Đặt phòng hôm nay
+                                Tổng Phòng
                             </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">5</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.TotalRoom</div>
                         </div>
                         <div class="col-auto">
-                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                            <i class="fas fa-bed fa-2x text-gray-300"></i>
                         </div>
                     </div>
                 </div>
@@ -59,12 +62,12 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
-                                Thu nhập tháng
+                                Đơn Đặt Phòng
                             </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">$2,500</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.TotalBooking</div>
                         </div>
                         <div class="col-auto">
-                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                            <i class="fas fa-calendar-check fa-2x text-gray-300"></i>
                         </div>
                     </div>
                 </div>
@@ -77,12 +80,12 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                Đánh giá mới
+                                Thu Nhập (VNĐ)
                             </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">12</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.TotalEarnings.ToString("N0")</div>
                         </div>
                         <div class="col-auto">
-                            <i class="fas fa-star fa-2x text-gray-300"></i>
+                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
                         </div>
                     </div>
                 </div>
@@ -90,85 +93,148 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-lg-8">
-            <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">
-                        <i class="fas fa-chart-line me-2"></i>
-                        Thu nhập theo tháng
-                    </h6>
-                </div>
-                <div class="card-body">
-                    <p>Biểu đồ thu nhập theo tháng sẽ được hiển thị ở đây.</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-lg-4">
-            <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">
-                        <i class="fas fa-bell me-2"></i>
-                        Thông báo gần đây
-                    </h6>
-                </div>
-                <div class="card-body">
-                    <div class="list-group list-group-flush">
-                        <div class="list-group-item d-flex justify-content-between align-items-center">
-                            <div>
-                                <strong>Đặt phòng mới</strong>
-                                <small class="text-muted d-block">Homestay ABC - 2 phút trước</small>
-                            </div>
-                        </div>
-                        <div class="list-group-item d-flex justify-content-between align-items-center">
-                            <div>
-                                <strong>Đánh giá mới</strong>
-                                <small class="text-muted d-block">5 sao - 15 phút trước</small>
-                            </div>
-                        </div>
-                        <div class="list-group-item d-flex justify-content-between align-items-center">
-                            <div>
-                                <strong>Thanh toán hoàn tất</strong>
-                                <small class="text-muted d-block">$150 - 1 giờ trước</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
+    <!-- Danh sách Homestay -->
     <div class="row">
         <div class="col-12">
             <div class="card shadow mb-4">
-                <div class="card-header py-3">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                     <h6 class="m-0 font-weight-bold text-primary">
-                        <i class="fas fa-tasks me-2"></i>
-                        Công việc cần làm
+                        <i class="fas fa-list me-2"></i>
+                        Danh sách Homestay của tôi
                     </h6>
+                    <div>
+                        <a href="@Url.Action("Index", "Bookings", new { area = "Owner" })" class="btn btn-info btn-sm me-2">
+                            <i class="fas fa-calendar me-1"></i>
+                            Xem đơn đặt phòng
+                        </a>
+                    <a href="@Url.Action("Create", "Homestays", new { area = "Owner" })" class="btn btn-primary btn-sm">
+                        <i class="fas fa-plus me-1"></i>
+                        Thêm Homestay
+                    </a>
+                    </div>
                 </div>
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h6>Hôm nay</h6>
-                            <ul class="list-unstyled">
-                                <li><i class="fas fa-check-circle text-success me-2"></i>Kiểm tra đặt phòng mới</li>
-                                <li><i class="fas fa-circle text-warning me-2"></i>Cập nhật giá phòng</li>
-                                <li><i class="fas fa-circle text-warning me-2"></i>Trả lời đánh giá khách hàng</li>
-                            </ul>
+                    @if (Model != null && Model.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Tên homestay</th>
+                                        <th>Địa chỉ</th>
+                                        <th>Trạng thái</th>
+                                        <th>Ngày tạo</th>
+                                        <th>Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>@item.Name</td>
+                                            <td>@item.Address</td>
+                                            <td>
+                                                <span class="badge @(item.Status == "Active" ? "bg-success" : "bg-warning")">
+                                                    @item.Status
+                                                </span>
+                                            </td>
+                                            <td>@(item.CreatedAt.HasValue ? item.CreatedAt.Value.ToString("dd/MM/yyyy") : "")</td>
+                                            <td>
+                                                <a href="@Url.Action("Details", "Homestays", new { area = "Owner", id = item.HomestayID })" class="btn btn-info btn-sm">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                                <a href="@Url.Action("Edit", "Homestays", new { area = "Owner", id = item.HomestayID })" class="btn btn-warning btn-sm">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
                         </div>
-                        <div class="col-md-6">
-                            <h6>Tuần này</h6>
-                            <ul class="list-unstyled">
-                                <li><i class="fas fa-circle text-warning me-2"></i>Dọn dẹp phòng</li>
-                                <li><i class="fas fa-circle text-warning me-2"></i>Kiểm tra thiết bị</li>
-                                <li><i class="fas fa-circle text-warning me-2"></i>Cập nhật thông tin homestay</li>
-                            </ul>
+                    }
+                    else
+                    {
+                        <div class="text-center py-4">
+                            <i class="fas fa-home fa-3x text-muted mb-3"></i>
+                            <h5 class="text-muted">Chưa có homestay nào</h5>
+                            <p class="text-muted">Bắt đầu bằng cách tạo homestay đầu tiên của bạn.</p>
+                            <a href="@Url.Action("Create", "Homestays", new { area = "Owner" })" class="btn btn-primary">
+                                <i class="fas fa-plus me-1"></i>
+                                Tạo Homestay
+                            </a>
                         </div>
-                    </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking gần đây -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        <i class="fas fa-calendar me-2"></i>
+                        Đơn đặt phòng gần đây
+                    </h6>
+                    <a href="@Url.Action("Index", "Bookings", new { area = "Owner" })" class="btn btn-primary btn-sm">
+                        <i class="fas fa-list me-1"></i>
+                        Xem tất cả
+                    </a>
+                </div>
+                <div class="card-body">
+                    @if (ViewBag.RecentBookings != null && ((List<HomestayBooking.Models.Bookings>)ViewBag.RecentBookings).Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Khách hàng</th>
+                                        <th>Homestay</th>
+                                        <th>Phòng</th>
+                                        <th>Ngày check-in</th>
+                                        <th>Ngày check-out</th>
+                                        <th>Tổng tiền</th>
+                                        <th>Trạng thái</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var booking in (List<HomestayBooking.Models.Bookings>)ViewBag.RecentBookings)
+                                    {
+                                        <tr>
+                                            <td>@(booking.Account != null ? booking.Account.UserName : "N/A")</td>
+                                            <td>@(booking.Rooms != null && booking.Rooms.Homestay != null ? booking.Rooms.Homestay.Name : "N/A")</td>
+                                            <td>@(booking.Rooms != null ? booking.Rooms.Name : "N/A")</td>
+                                            <td>@(booking.CheckInDate.ToString("dd/MM/yyyy"))</td>
+                                            <td>@(booking.CheckOutDate.ToString("dd/MM/yyyy"))</td>
+                                            <td>@(booking.Payments != null && booking.Payments.Amount.HasValue ? booking.Payments.Amount.Value.ToString("N0") : "0") VNĐ</td>
+                                            <td>
+                                                <span class="badge @(booking.Status == "Confirmed" ? "bg-success" : booking.Status == "Pending" ? "bg-warning" : "bg-secondary")">
+                                                    @booking.Status
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-4">
+                            <i class="fas fa-calendar fa-3x text-muted mb-3"></i>
+                            <h5 class="text-muted">Chưa có đơn đặt phòng nào</h5>
+                            <p class="text-muted">Khi có khách đặt phòng, thông tin sẽ hiển thị ở đây.</p>
+                        </div>
+                    }
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>feather.replace();</script>
+}

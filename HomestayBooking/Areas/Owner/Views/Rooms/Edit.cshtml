@@ -1,0 +1,126 @@
+﻿@model HomestayBooking.Models.Rooms
+@{
+    ViewBag.Title = "Sửa phòng";
+    Layout = "~/Views/Shared/_LayoutOwner.cshtml";
+    int homestayId = ViewBag.HomestayID ?? 0;
+    string homestayName = ViewBag.HomestayName ?? "";
+}
+<h2>Sửa phòng - @homestayName</h2>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.RoomID)
+    @Html.HiddenFor(m => m.HomestayID)
+    <div class="form-horizontal">
+        <div class="form-group">
+            @Html.LabelFor(m => m.Type, "Loại phòng", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <select name="Type" id="Type" class="form-control" onchange="updateRoomName()">
+                    <option value="">-- Chọn loại phòng --</option>
+                    @for (int i = 1; i <= 10; i++)
+                    {
+                        <option value="@i" @(Model.Type == i.ToString() ? "selected" : "")>Loại @i</option>
+                    }
+                </select>
+                @Html.ValidationMessageFor(m => m.Type, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Name, "Tên phòng", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.Name, new { @class = "form-control", @readonly = "readonly", id = "RoomName" })
+                <small class="form-text text-muted">Tên phòng sẽ tự động được tạo dựa trên loại phòng.</small>
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.PricePerNight, "Giá/đêm", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.PricePerNight, new { @class = "form-control", type = "number", min = "0" })
+                @Html.ValidationMessageFor(m => m.PricePerNight, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Available, "Trạng thái", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.CheckBox("Available", Model.Available == true) Còn phòng
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-2">Ảnh hiện tại</label>
+            <div class="col-md-10">
+                <div class="row">
+                @foreach (var img in Model.RoomImages)
+                {
+                    <div class="col-md-3 mb-2">
+                        <img src="@Url.Content(img.ImageURL)" class="img-thumbnail" style="max-width:100%;height:120px;object-fit:cover;" />
+                        <button type="button" class="btn btn-danger btn-sm mt-1 delete-image-btn" data-imgid="@img.ImageID">Xóa</button>
+                    </div>
+                }
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-2">Thêm ảnh mới</label>
+            <div class="col-md-10">
+                <input type="file" name="images" multiple accept="image/*" class="form-control" />
+                <small class="form-text text-muted">Chọn thêm ảnh cho phòng.</small>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Lưu" class="btn btn-success" />
+                @Html.ActionLink("Quay lại danh sách", "Index", new { homestayId = homestayId }, new { @class = "btn btn-secondary" })
+            </div>
+        </div>
+    </div>
+}
+@section Scripts {
+<script>
+    $(document).on('click', '.delete-image-btn', function () {
+        var btn = $(this);
+        var imgId = btn.data('imgid');
+        if (confirm('Bạn có chắc muốn xóa ảnh này?')) {
+            $.post('@Url.Action("DeleteImage", "Rooms", new { area = "Owner" })', { id: imgId }, function (res) {
+                if (res.success) {
+                    btn.closest('.col-md-3').remove();
+                }
+            });
+        }
+    });
+
+    function updateRoomName() {
+        var typeSelect = document.getElementById('Type');
+        var roomNameInput = document.getElementById('RoomName');
+        var selectedType = typeSelect.value;
+        
+        if (selectedType) {
+            var roomName = '';
+            switch (parseInt(selectedType)) {
+                case 1:
+                    roomName = 'Phòng đơn';
+                    break;
+                case 2:
+                    roomName = 'Phòng đôi';
+                    break;
+                case 3:
+                case 4:
+                case 5:
+                    roomName = 'Family Room ' + selectedType + ' người';
+                    break;
+                default:
+                    roomName = 'Phòng loại ' + selectedType;
+                    break;
+            }
+            roomNameInput.value = roomName;
+        } else {
+            roomNameInput.value = '';
+        }
+    }
+
+    // Cập nhật tên phòng khi trang load
+    $(document).ready(function() {
+        updateRoomName();
+    });
+</script>
+} 

@@ -1,0 +1,197 @@
+﻿@model HomestayBooking.Models.Rooms
+@{
+    ViewBag.Title = "Sửa phòng";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    int homestayId = ViewBag.HomestayID ?? 0;
+}
+<h2>Sửa phòng</h2>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.RoomID)
+    @Html.HiddenFor(m => m.HomestayID)
+    <div class="form-horizontal">
+        <div class="form-group">
+            @Html.LabelFor(m => m.Type, "Loại phòng", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <select name="Type" id="Type" class="form-control" onchange="updateRoomName()">
+                    <option value="">-- Chọn loại phòng --</option>
+                    @for (int i = 1; i <= 10; i++)
+                    {
+                        <option value="@i" @(Model.Type == i.ToString() ? "selected" : "")>Loại @i</option>
+                    }
+                </select>
+                @Html.ValidationMessageFor(m => m.Type, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Name, "Tên phòng", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.Name, new { @class = "form-control", @readonly = "readonly", id = "RoomName" })
+                <small class="form-text text-muted">Tên phòng sẽ tự động được tạo dựa trên loại phòng.</small>
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.PricePerNight, "Giá/đêm", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.PricePerNight, new { @class = "form-control", type = "number", min = "0" })
+                @Html.ValidationMessageFor(m => m.PricePerNight, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Available, "Trạng thái", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.CheckBox("Available", Model.Available == true) Còn phòng
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-2">Ảnh hiện tại</label>
+            <div class="col-md-10">
+                <div class="row">
+                @foreach (var img in Model.RoomImages)
+                {
+                    <div class="col-md-3 mb-2">
+                        <img src="@Url.Content(img.ImageURL)" 
+                             class="img-thumbnail" 
+                             style="max-width:100%;height:120px;object-fit:cover;cursor:pointer;" 
+                             onclick="openGallery()" />
+                        <button type="button" class="btn btn-danger btn-sm mt-1 delete-image-btn" data-imgid="@img.ImageID">Xóa</button>
+                    </div>
+                }
+                </div>
+                @if (Model.RoomImages.Any())
+                {
+                    <p class="text-muted mt-2">
+                        <small>Click vào ảnh để xem gallery (@Model.RoomImages.Count ảnh)</small>
+                    </p>
+                }
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-2">Thêm ảnh mới</label>
+            <div class="col-md-10">
+                <input type="file" name="images" multiple accept="image/*" class="form-control" />
+                <small class="form-text text-muted">Chọn thêm ảnh cho phòng.</small>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Lưu" class="btn btn-success" />
+                @Html.ActionLink("Quay lại danh sách", "Index", new { homestayId = homestayId }, new { @class = "btn btn-secondary" })
+            </div>
+        </div>
+    </div>
+}
+
+<!-- Modal Gallery -->
+<div class="modal fade" id="galleryModal" tabindex="-1" aria-labelledby="galleryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="galleryModalLabel">Gallery ảnh phòng</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="galleryCarousel" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        @if (Model.RoomImages != null && Model.RoomImages.Any())
+                        {
+                            bool first = true;
+                            foreach (var img in Model.RoomImages)
+                            {
+                                <div class="carousel-item @(first ? "active" : "")">
+                                    <img src="@Url.Content(img.ImageURL)"
+                                         class="d-block w-100"
+                                         style="max-height: 500px; object-fit: contain;"
+                                         alt="Ảnh phòng" />
+                                </div>
+                                first = false;
+                            }
+                        }
+                    </div>
+                    @if (Model.RoomImages != null && Model.RoomImages.Count > 1)
+                    {
+                        <button class="carousel-control-prev" type="button" data-bs-target="#galleryCarousel" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#galleryCarousel" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    }
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    function openGallery() {
+        var modal = new bootstrap.Modal(document.getElementById('galleryModal'));
+        modal.show();
+
+        // Khởi tạo lại carousel mỗi lần mở modal
+        var carouselEl = document.getElementById('galleryCarousel');
+        if (carouselEl) {
+            var carousel = bootstrap.Carousel.getInstance(carouselEl);
+            if (!carousel) {
+                carousel = new bootstrap.Carousel(carouselEl, { interval: false });
+            }
+            carousel.to(0); // Luôn về ảnh đầu tiên
+        }
+    }
+
+    $(document).on('click', '.delete-image-btn', function () {
+        var btn = $(this);
+        var imgId = btn.data('imgid');
+        if (confirm('Bạn có chắc muốn xóa ảnh này?')) {
+            $.post('@Url.Action("DeleteImage", "Rooms", new { area = "Admin" })', { id: imgId }, function (res) {
+                if (res.success) {
+                    btn.closest('.col-md-3').remove();
+                }
+            });
+        }
+    });
+
+    function updateRoomName() {
+        var typeSelect = document.getElementById('Type');
+        var roomNameInput = document.getElementById('RoomName');
+        var selectedType = typeSelect.value;
+        
+        if (selectedType) {
+            var roomName = '';
+            switch (parseInt(selectedType)) {
+                case 1:
+                    roomName = 'Phòng đơn';
+                    break;
+                case 2:
+                    roomName = 'Phòng đôi';
+                    break;
+                case 3:
+                case 4:
+                case 5:
+                    roomName = 'Family Room ' + selectedType + ' người';
+                    break;
+                default:
+                    roomName = 'Phòng loại ' + selectedType;
+                    break;
+            }
+            roomNameInput.value = roomName;
+        } else {
+            roomNameInput.value = '';
+        }
+    }
+
+    // Cập nhật tên phòng khi trang load
+    $(document).ready(function() {
+        updateRoomName();
+    });
+    </script>
+} 

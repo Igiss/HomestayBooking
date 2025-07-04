@@ -1,0 +1,26 @@
+﻿@model HomestayBooking.Models.Rooms
+@{
+    ViewBag.Title = "Xóa phòng";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<h2>Xóa phòng</h2>
+<h4>Bạn có chắc muốn xóa phòng này?</h4>
+<dl class="dl-horizontal">
+    <dt>Tên phòng</dt>
+    <dd>@Model.Name</dd>
+    <dt>Loại phòng</dt>
+    <dd>@Model.Type</dd>
+    <dt>Giá/đêm</dt>
+    <dd>@Model.PricePerNight</dd>
+    <dt>Sức chứa</dt>
+    <dd>@Model.Capacity</dd>
+    <dt>Trạng thái</dt>
+    <dd>@(Model.Available == true ? "Còn phòng" : "Hết phòng")</dd>
+</dl>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="id" value="@Model.RoomID" />
+    <button type="submit" class="btn btn-danger">Xóa</button>
+    @Html.ActionLink("Hủy", "Index", new { homestayId = Model.HomestayID }, new { @class = "btn btn-secondary" })
+} 

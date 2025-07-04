@@ -1,0 +1,108 @@
+﻿@model HomestayBooking.Models.Rooms
+@{
+    ViewBag.Title = "Chi tiết phòng";
+    Layout = "~/Views/Shared/_LayoutOwner.cshtml";
+}
+<h2>Chi tiết phòng</h2>
+
+<dl class="dl-horizontal">
+    <dt>Tên phòng</dt>
+    <dd>@Model.Name</dd>
+    <dt>Loại phòng</dt>
+    <dd>@Model.Type</dd>
+    <dt>Giá/đêm</dt>
+    <dd>@Model.PricePerNight</dd>
+    <dt>Trạng thái</dt>
+    <dd>@(Model.Available == true ? "Còn phòng" : "Hết phòng")</dd>
+</dl>
+@if (Model.RoomImages != null && Model.RoomImages.Any() && !string.IsNullOrEmpty(Model.RoomImages.First().ImageURL))
+{
+    var firstImg = Model.RoomImages.First().ImageURL;
+    <h4>Ảnh phòng (@Model.RoomImages.Count ảnh)</h4>
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <img src="@Url.Content(firstImg)" 
+                 class="img-thumbnail" 
+                 style="max-width:100%;height:250px;object-fit:cover;cursor:pointer;" 
+                 onclick="openGallery()" 
+                 alt="Ảnh đại diện phòng" />
+            <p class="text-muted mt-2">
+                <small>Click vào ảnh để xem tất cả ảnh phòng (@Model.RoomImages.Count ảnh)</small>
+            </p>
+        </div>
+    </div>
+}
+else
+{
+    <h4>Ảnh phòng</h4>
+    <p class="text-muted">Chưa có ảnh</p>
+}
+<p>
+    @Html.ActionLink("Sửa", "Edit", new { id = Model.RoomID }, new { @class = "btn btn-warning" })
+    @Html.ActionLink("Quay lại danh sách", "Index", new { homestayId = Model.HomestayID }, new { @class = "btn btn-secondary" })
+</p>
+
+<!-- Modal Gallery -->
+<div class="modal fade" id="galleryModal" tabindex="-1" aria-labelledby="galleryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="galleryModalLabel">Gallery ảnh phòng</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="galleryCarousel" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        @if (Model.RoomImages != null && Model.RoomImages.Any())
+                        {
+                            bool first = true;
+                            foreach (var img in Model.RoomImages)
+                            {
+                                <div class="carousel-item @(first ? "active" : "")">
+                                    <img src="@Url.Content(img.ImageURL)"
+                                         class="d-block w-100"
+                                         style="max-height: 500px; object-fit: contain;"
+                                         alt="Ảnh phòng" />
+                                </div>
+                                first = false;
+                            }
+                        }
+                    </div>
+                    @if (Model.RoomImages != null && Model.RoomImages.Count > 1)
+                    {
+                        <button class="carousel-control-prev" type="button" data-bs-target="#galleryCarousel" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#galleryCarousel" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    }
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+function openGallery() {
+    var modal = new bootstrap.Modal(document.getElementById('galleryModal'));
+    modal.show();
+
+    // Khởi tạo lại carousel mỗi lần mở modal
+    var carouselEl = document.getElementById('galleryCarousel');
+    if (carouselEl) {
+        var carousel = bootstrap.Carousel.getInstance(carouselEl);
+        if (!carousel) {
+            carousel = new bootstrap.Carousel(carouselEl, { interval: false });
+        }
+        carousel.to(0); // Luôn về ảnh đầu tiên
+    }
+}
+</script>
+} 

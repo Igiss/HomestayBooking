@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -18,7 +19,9 @@ namespace HomestayBooking.Controllers
         // GET: Accounts
         public ActionResult Index()
         {
-            return View(db.Account.ToList());
+            var accounts = db.Account.ToList();
+
+            return View(accounts);
         }
 
         // GET: Accounts/Details/5
@@ -49,12 +52,24 @@ namespace HomestayBooking.Controllers
 
         // POST: Login
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public ActionResult Login(string username, string password)
         {
-            if (ModelState.IsValid)
+            try
             {
                 // Kiểm tra thông tin đăng nhập
+                if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+                {
+                    ModelState.AddModelError("", "Vui lòng nhập đầy đủ thông tin đăng nhập!");
+                    return View();
+                }
+
+                // Kiểm tra kết nối database
+                if (db == null)
+                {
+                    ModelState.AddModelError("", "Lỗi kết nối database!");
+                    return View();
+                }
+
                 var account = db.Account.FirstOrDefault(a => a.UserName == username && a.Password == password);
 
                 if (account != null)
@@ -66,14 +81,32 @@ namespace HomestayBooking.Controllers
                     Session["UserID"] = account.AccountID;
                     Session["Username"] = account.UserName;
                     Session["UserRole"] = account.Role;
-
-                    // Chuyển hướng theo role
-                    return RedirectToAction("RedirectToRolePage");
+                    
+                    // Chuyển hướng trực tiếp theo role thay vì qua RedirectToRolePage
+                    var role = account.Role?.Trim().ToLower();
+                    
+                    switch (role)
+                    {
+                        case "admin":
+                            return RedirectToAction("Index", "Home", new { area = "Admin" });
+                        case "owner":
+                        case "host":
+                            return RedirectToAction("Index", "Home", new { area = "Owner" });
+                        case "customer":
+                            return RedirectToAction("Index", "Home");
+                        default:
+                            ModelState.AddModelError("", $"Role không hợp lệ: '{account.Role}'. Vui lòng kiểm tra lại!");
+                            return View();
+                    }
                 }
                 else
                 {
                     ModelState.AddModelError("", "Tên đăng nhập hoặc mật khẩu không đúng!");
                 }
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "Có lỗi xảy ra: " + ex.Message);
             }
 
             return View();
@@ -98,7 +131,6 @@ namespace HomestayBooking.Controllers
                 case "customer":
                     return RedirectToAction("Index", "Home");
                 default:
-                    // Nếu không có role hoặc role không hợp lệ
                     FormsAuthentication.SignOut();
                     Session.Clear();
                     return RedirectToAction("Login");
@@ -108,9 +140,8 @@ namespace HomestayBooking.Controllers
         // Logout
         public ActionResult Logout()
         {
-            FormsAuthentication.SignOut();
             Session.Clear();
-            return RedirectToAction("Login");
+            return RedirectToAction("Login", "Accounts");
         }
 
         // GET: Register
@@ -126,9 +157,27 @@ namespace HomestayBooking.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Account.Add(account);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                try
+                {
+                    db.Account.Add(account);
+                    db.SaveChanges();
+
+                    // Đăng nhập luôn cho user vừa tạo
+                    FormsAuthentication.SetAuthCookie(account.UserName, false);
+                    Session["UserID"] = account.AccountID;
+                    Session["Username"] = account.UserName;
+                    Session["UserRole"] = account.Role;
+
+                    // Chuyển về trang Home
+                    return RedirectToAction("Index", "Home");
+                }
+                catch (DbUpdateException ex)
+                {
+                    var innerException = ex.InnerException?.InnerException;
+                    Console.WriteLine(innerException?.Message);
+                    // hoặc log ra file/log system
+                    ModelState.AddModelError("", "Có lỗi xảy ra khi lưu dữ liệu. Vui lòng thử lại sau.");
+                }
             }
 
             return View(account);
@@ -158,9 +207,19 @@ namespace HomestayBooking.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(account).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                try
+                {
+                    db.Entry(account).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                catch (DbUpdateException ex)
+                {
+                    var innerException = ex.InnerException?.InnerException;
+                    Console.WriteLine(innerException?.Message);
+                    // hoặc log ra file/log system
+                    ModelState.AddModelError("", "Có lỗi xảy ra khi lưu dữ liệu. Vui lòng thử lại sau.");
+                }
             }
             return View(account);
         }
@@ -186,9 +245,68 @@ namespace HomestayBooking.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Account account = db.Account.Find(id);
-            db.Account.Remove(account);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            try
+            {
+                db.Account.Remove(account);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            catch (DbUpdateException ex)
+            {
+                var innerException = ex.InnerException?.InnerException;
+                Console.WriteLine(innerException?.Message);
+                // hoặc log ra file/log system
+                ModelState.AddModelError("", "Có lỗi xảy ra khi xóa dữ liệu. Vui lòng thử lại sau.");
+            }
+            return View(account);
+        }
+
+        // Test action để kiểm tra và tạo tài khoản
+        public ActionResult TestSetup()
+        {
+            try
+            {
+                // Test kết nối database
+                var accountCount = db.Account.Count();
+                ViewBag.DbStatus = $"Database OK - Có {accountCount} tài khoản";
+                
+                // Kiểm tra xem có tài khoản host nào không
+                var hostAccount = db.Account.FirstOrDefault(a => a.Role == "host");
+                
+                if (hostAccount == null)
+                {
+                    // Tạo tài khoản host mẫu
+                    var newHost = new Account
+                    {
+                        UserName = "host",
+                        Password = "123456",
+                        Role = "host"
+                    };
+                    
+                    db.Account.Add(newHost);
+                    db.SaveChanges();
+                    
+                    ViewBag.Message = "Đã tạo tài khoản host: username=host, password=123456";
+                }
+                else
+                {
+                    ViewBag.Message = $"Tài khoản host đã tồn tại: {hostAccount.UserName}";
+                }
+                
+                // Hiển thị tất cả tài khoản
+                var accounts = db.Account.ToList();
+                ViewBag.Accounts = accounts;
+                
+
+                
+                return View();
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = $"Database Error: {ex.Message}";
+                ViewBag.DbStatus = "Database FAILED";
+                return View();
+            }
         }
 
         protected override void Dispose(bool disposing)

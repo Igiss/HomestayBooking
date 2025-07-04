@@ -16,8 +16,8 @@ namespace HomestayBooking.Filters
 
         protected override bool AuthorizeCore(System.Web.HttpContextBase httpContext)
         {
-            // Kiểm tra xem user đã đăng nhập chưa
-            if (!httpContext.User.Identity.IsAuthenticated)
+            // Kiểm tra xem user đã đăng nhập chưa (qua session)
+            if (httpContext.Session["UserID"] == null)
                 return false;
 
             // Nếu không có role nào được chỉ định, cho phép tất cả user đã đăng nhập
@@ -38,11 +38,11 @@ namespace HomestayBooking.Filters
         protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)
         {
             // Nếu chưa đăng nhập, chuyển hướng đến trang login
-            if (!filterContext.HttpContext.User.Identity.IsAuthenticated)
+            if (filterContext.HttpContext.Session["UserID"] == null)
             {
                 filterContext.Result = new RedirectToRouteResult(
                     new RouteValueDictionary(
-                        new { controller = "Accounts", action = "Login" }
+                        new { controller = "Accounts", action = "Login", area = "" }
                     )
                 );
             }
@@ -51,7 +51,7 @@ namespace HomestayBooking.Filters
                 // Nếu đã đăng nhập nhưng không có quyền, chuyển hướng đến trang lỗi
                 filterContext.Result = new RedirectToRouteResult(
                     new RouteValueDictionary(
-                        new { controller = "Home", action = "Unauthorized" }
+                        new { controller = "Home", action = "Unauthorized", area = "" }
                     )
                 );
             }

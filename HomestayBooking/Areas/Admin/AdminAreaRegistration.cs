@@ -1,4 +1,5 @@
 using System.Web.Mvc;
+using System.Web.Security;
 
 namespace HomestayBooking.Areas.Admin
 {
@@ -17,7 +18,8 @@ namespace HomestayBooking.Areas.Admin
             context.MapRoute(
                 "Admin_default",
                 "Admin/{controller}/{action}/{id}",
-                new { action = "Index", id = UrlParameter.Optional }
+                new { action = "Index", id = UrlParameter.Optional },
+                namespaces: new[] { "HomestayBooking.Areas.Admin.Controllers" }
             );
         }
     }

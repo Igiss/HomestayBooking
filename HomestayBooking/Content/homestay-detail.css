@@ -1,0 +1,193 @@
+/* CSS cho trang chi tiết Homestay */
+.homestay-detail-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: auto;
+    gap: 10px;
+    width: 100%;
+    max-width: 850px;
+}
+.gallery-grid .item {
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+    aspect-ratio: 1;
+}
+.gallery-grid .item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+.gallery-grid .item.large {
+    grid-column: span 2;
+    grid-row: span 2;
+}
+.gallery-grid .item.overlay {
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    font-weight: bold;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.info-booking-wrapper {
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+    padding: 20px;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+.room-info-text {
+    display: block;
+    width: 60%;
+    max-width: 900px;
+    margin: 40px;
+    padding: 20px;
+    text-align: center;
+    font-family: Arial, sans-serif;
+    flex: 2;
+}
+.room-info-text h4 {
+    text-transform: uppercase;
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 10px;
+}
+.room-info-text h2 {
+    font-size: 22px;
+    font-style: italic;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #333;
+}
+.room-info-text p {
+    font-size: 16px;
+    line-height: 1.7;
+    color: #555;
+    text-align: justify;
+}
+@media (max-width: 768px) {
+    .homestay-detail-container {
+        padding: 10px;
+    }
+    .gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .gallery-grid .item.large {
+        grid-column: span 2;
+        grid-row: span 2;
+    }
+    .info-booking-wrapper {
+        flex-direction: column;
+    }
+    .room-info-text {
+        width: 100%;
+        margin: 20px;
+    }
+}
+
+/* Homestay Detail Creative Layout */
+.homestay-detail-creative {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.gallery-main-img {
+    transition: box-shadow 0.3s;
+}
+.gallery-main-img:hover {
+    box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+}
+.gallery-thumbs {
+    margin-top: 8px;
+}
+.gallery-thumb, .gallery-thumb-more {
+    border-radius: 8px;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.gallery-thumb:hover, .gallery-thumb-more:hover {
+    transform: scale(1.08);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    z-index: 2;
+}
+.homestay-info-box {
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    margin-bottom: 18px;
+}
+.amenities-list .fa {
+    font-size: 1.2rem;
+}
+.amenities-list span {
+    font-size: 1rem;
+}
+.booking-form-box {
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+.booking-form-box input, .booking-form-box label {
+    font-size: 1rem;
+}
+.booking-form-box .btn-danger {
+    font-size: 1.1rem;
+    border-radius: 8px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+.homestay-detail-desc {
+    font-size: 1.08rem;
+    color: #444;
+    line-height: 1.7;
+    background: #fafbfc;
+}
+.homestay-rating-box {
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+.room-card-hover {
+    transition: box-shadow 0.2s, transform 0.2s;
+}
+.room-card-hover:hover {
+    box-shadow: 0 6px 24px rgba(0,0,0,0.13);
+    transform: translateY(-4px) scale(1.03);
+    z-index: 2;
+}
+@media (max-width: 992px) {
+    .homestay-detail-creative {
+        padding: 0 8px;
+    }
+    .gallery-main-img {
+        max-height: 260px;
+    }
+}
+@media (max-width: 768px) {
+    .homestay-detail-creative {
+        padding: 0 2px;
+    }
+    .gallery-main-img {
+        max-height: 180px;
+    }
+    .gallery-thumb, .gallery-thumb-more {
+        height: 48px !important;
+        width: 60px !important;
+    }
+    .homestay-info-box, .booking-form-box, .homestay-rating-box {
+        padding: 1rem !important;
+    }
+    .homestay-detail-desc {
+        padding: 1rem !important;
+    }
+} 

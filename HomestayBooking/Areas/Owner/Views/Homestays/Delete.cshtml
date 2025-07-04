@@ -1,0 +1,38 @@
+﻿@model HomestayBooking.Models.Homestay
+@{
+    ViewBag.Title = "Xóa Homestay";
+    Layout = "~/Views/Shared/_LayoutOwner.cshtml";
+}
+
+<h2>Xóa Homestay</h2>
+
+<h3>Bạn có chắc chắn muốn xóa homestay này?</h3>
+<div>
+    <h4>Thông tin Homestay</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>ID</dt>
+        <dd>@Model.HomestayID</dd>
+
+        <dt>Tên homestay</dt>
+        <dd>@Model.Name</dd>
+
+        <dt>Địa chỉ</dt>
+        <dd>@Model.Address</dd>
+
+        <dt>Trạng thái</dt>
+        <dd>
+            <span class="badge @(Model.Status == "active" ? "bg-success" : Model.Status == "inactive" ? "bg-danger" : "bg-warning")">
+                @Model.Status
+            </span>
+        </dd>
+    </dl>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <input type="submit" value="Xóa" class="btn btn-danger" />
+        <span class="mx-2">|</span>
+        @Html.ActionLink("Quay lại danh sách", "Index")
+    }
+</div> 

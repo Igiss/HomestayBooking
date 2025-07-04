@@ -1,0 +1,96 @@
+﻿@model HomestayBooking.Models.Bookings
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Delete</title>
+</head>
+<body>
+    <h3>Are you sure you want to delete this?</h3>
+    <div>
+        <h4>Bookings</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.CheckInDate)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.CheckInDate)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.CheckOutDate)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.CheckOutDate)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.Status)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.Status)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.CreatedAt)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.CreatedAt)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.Account.UserName)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.Account.UserName)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.Rooms.Name)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.Rooms.Name)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.Payments.PaymentMethod)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.Payments.PaymentMethod)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.Reviews.Comment)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.Reviews.Comment)
+            </dd>
+    
+        </dl>
+    
+        @using (Html.BeginForm()) {
+            @Html.AntiForgeryToken()
+    
+            <div class="form-actions no-color">
+                <input type="submit" value="Delete" class="btn btn-default" /> |
+                @Html.ActionLink("Back to List", "Index")
+            </div>
+        }
+    </div>
+</body>
+</html>

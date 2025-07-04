@@ -1,4 +1,4 @@
-@{
+﻿@{
     ViewBag.Title = "Đăng nhập";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -20,7 +20,6 @@
                         novalidate = "novalidate"
                     }))
                     {
-                        @Html.AntiForgeryToken()
 
                         if (!ViewData.ModelState.IsValid)
                         {

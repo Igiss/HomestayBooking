@@ -1,0 +1,90 @@
+﻿@model HomestayBooking.Models.Bookings
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Details</title>
+</head>
+<body>
+    <div>
+        <h4>Bookings</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.CheckInDate)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.CheckInDate)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.CheckOutDate)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.CheckOutDate)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.Status)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.Status)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.CreatedAt)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.CreatedAt)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.Account.UserName)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.Account.UserName)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.Rooms.Name)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.Rooms.Name)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.Payments.PaymentMethod)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.Payments.PaymentMethod)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.Reviews.Comment)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.Reviews.Comment)
+            </dd>
+    
+        </dl>
+    </div>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.BookingID }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+</body>
+</html>

@@ -13,11 +13,18 @@ namespace HomestayBooking
     {
         protected void Application_Start()
         {
+            AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
-            AreaRegistration.RegisterAllAreas();
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+        }
+
+        protected void Application_BeginRequest()
+        {
+            // Đảm bảo encoding UTF-8 cho tất cả request
+            Response.ContentEncoding = System.Text.Encoding.UTF8;
+            Response.HeaderEncoding = System.Text.Encoding.UTF8;
         }
     }
 }

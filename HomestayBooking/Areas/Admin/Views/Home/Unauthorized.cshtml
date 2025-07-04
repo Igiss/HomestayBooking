@@ -1,0 +1,11 @@
+@{
+    ViewBag.Title = "Không có quyền truy cập";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<div class="container mt-5">
+    <div class="alert alert-danger">
+        <h2>403 - Không có quyền truy cập</h2>
+        <p>Bạn không có quyền truy cập vào trang này.</p>
+        <a href="@Url.Action("Index", "Home", new { area = "Admin" })" class="btn btn-primary">Về trang quản trị</a>
+    </div>
+</div> 

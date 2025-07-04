@@ -34,8 +34,8 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <i class="fas fa-search me-1"></i>Tìm homestay
+                        <a class="nav-link" href="@Url.Action("Rooms", "Home")">
+                            <i class="fas fa-bed me-1"></i>Xem phòng
                         </a>
                     </li>
                     <li class="nav-item">
@@ -93,12 +93,12 @@
                     else
                     {
                         <li class="nav-item">
-                            <a class="nav-link" href="/Login">
+                            <a class="nav-link" href="@Url.Action("Login", "Accounts")">
                                 <i class="fas fa-sign-in-alt me-1"></i>Đăng nhập
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/Register">
+                            <a class="nav-link" href="@Url.Action("Create", "Accounts")">
                                 <i class="fas fa-user-plus me-1"></i>Đăng ký
                             </a>
                         </li>

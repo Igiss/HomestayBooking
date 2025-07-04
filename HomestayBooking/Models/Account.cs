@@ -11,7 +11,7 @@ namespace HomestayBooking.Models
 {
     using System;
     using System.Collections.Generic;
-
+    
     public partial class Account
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -21,12 +21,12 @@ namespace HomestayBooking.Models
             this.Homestay = new HashSet<Homestay>();
             this.Information = new HashSet<Information>();
         }
-
+    
         public int AccountID { get; set; }
         public string UserName { get; set; }
         public string Password { get; set; }
         public string Role { get; set; }
-
+    
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Bookings> Bookings { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

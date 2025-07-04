@@ -1,0 +1,30 @@
+﻿@model IEnumerable<HomestayBooking.Models.Account>
+@{
+    ViewBag.Title = "Quản lý tài khoản";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>Quản lý tài khoản</h2>
+<table class="table">
+    <tr>
+        <th>ID</th>
+        <th>Tên đăng nhập</th>
+        <th>Vai trò</th>
+        <th></th>
+    </tr>
+@foreach (var item in Model) {
+    <tr>
+        <td>@item.AccountID</td>
+        <td>@item.UserName</td>
+        <td>@item.Role</td>
+        <td>
+            @Html.ActionLink("Sửa", "Edit", new { id = item.AccountID }) |
+            @Html.ActionLink("Chi tiết", "Details", new { id = item.AccountID }) |
+            @Html.ActionLink("Xóa", "Delete", new { id = item.AccountID })
+        </td>
+    </tr>
+}
+</table>
+<p>
+    @Html.ActionLink("Tạo mới tài khoản", "Create")
+</p> 

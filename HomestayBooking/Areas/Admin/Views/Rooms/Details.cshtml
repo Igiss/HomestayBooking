@@ -1,0 +1,100 @@
+﻿@model HomestayBooking.Models.Rooms
+@{
+    ViewBag.Title = "Chi tiết phòng";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<h2>Chi tiết phòng</h2>
+
+<!-- Debug Info -->
+<div class="alert alert-info">
+    <strong>Debug Info:</strong><br />
+    RoomID: @Model.RoomID<br />
+    RoomImages Count: @(Model.RoomImages != null ? Model.RoomImages.Count : 0)<br />
+    @if (Model.RoomImages != null && Model.RoomImages.Any())
+    {
+        <strong>Image URLs:</strong><br />
+        foreach (var img in Model.RoomImages)
+        {
+            <span>@img.ImageURL</span><br />
+        }
+    }
+    <br />
+    <button type="button" class="btn btn-primary" onclick="testGallery()">Test Gallery</button>
+</div>
+
+<dl class="dl-horizontal">
+    <dt>Tên phòng</dt>
+    <dd>@Model.Name</dd>
+    <dt>Loại phòng</dt>
+    <dd>@Model.Type</dd>
+    <dt>Giá/đêm</dt>
+    <dd>@Model.PricePerNight</dd>
+    <dt>Trạng thái</dt>
+    <dd>@(Model.Available == true ? "Còn phòng" : "Hết phòng")</dd>
+</dl>
+@if (Model.RoomImages != null && Model.RoomImages.Any())
+{
+    <h4>Ảnh phòng</h4>
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <img src="@Url.Content(Model.RoomImages.FirstOrDefault()?.ImageURL ?? "")" 
+                 class="img-thumbnail" 
+                 style="max-width:100%;height:250px;object-fit:cover;cursor:pointer;" 
+                 onclick="openGallery()" 
+                 alt="Ảnh đại diện phòng" />
+            <p class="text-muted mt-2">
+                <small>Click vào ảnh để xem tất cả ảnh phòng (@Model.RoomImages.Count ảnh)</small>
+            </p>
+        </div>
+    </div>
+}
+else
+{
+    <h4>Ảnh phòng</h4>
+    <p class="text-muted">Chưa có ảnh nào cho phòng này.</p>
+}
+<p>
+    @Html.ActionLink("Sửa", "Edit", new { id = Model.RoomID }, new { @class = "btn btn-warning" })
+    @Html.ActionLink("Quay lại danh sách", "Index", new { homestayId = Model.HomestayID }, new { @class = "btn btn-secondary" })
+</p>
+
+<!-- Modal Gallery -->
+<div class="modal fade" id="galleryModal" tabindex="-1" aria-labelledby="galleryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="galleryModalLabel">Gallery ảnh phòng</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                        @if (Model.RoomImages != null && Model.RoomImages.Any())
+                        {
+                            foreach (var img in Model.RoomImages)
+                            {
+                            <div class="col-md-4 mb-3">
+                                    <img src="@Url.Content(img.ImageURL)"
+                                     class="img-fluid img-thumbnail" 
+                                     style="max-height:200px;object-fit:cover;" 
+                                         alt="Ảnh phòng" />
+                                </div>
+                        }
+                    }
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+function openGallery() {
+    var modal = new bootstrap.Modal(document.getElementById('galleryModal'));
+    modal.show();
+}
+</script>
+} 
